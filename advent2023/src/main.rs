@@ -1,10 +1,10 @@
 #![allow(dead_code)]
-mod advent02;
+mod advent03;
 /* mod scratch; */
 mod shared;
 
 fn main() {
-    use advent02::{part1, part2};
+    use advent03::{part1, part2};
     println!("{}", part1());
     println!("{}", part2());
 }
