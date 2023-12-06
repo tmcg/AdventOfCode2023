@@ -1,4 +1,4 @@
-use crate::shared;
+
 use nom::{
   IResult,
   bytes::complete::tag,
@@ -6,8 +6,6 @@ use nom::{
   multi::separated_list1,
   sequence::tuple,
 };
-
-const DAY_NUMBER: i32 = 2;
 
 #[derive(Debug, PartialEq)]
 struct CubeReveal {
@@ -77,8 +75,9 @@ fn parse_game(input: &str) -> CubeGame {
 }
 
 pub fn part1() -> String {
-  let lines = shared::input_file_as_lines(DAY_NUMBER);
-
+  let input = include_str!("../input1.txt");
+  let lines = shared::input_as_lines(input);
+  
   let games: Vec<CubeGame> = 
     lines.iter().map(|x| parse_game(x)).collect();
   
@@ -90,7 +89,8 @@ pub fn part1() -> String {
 }
 
 pub fn part2() -> String {
-  let lines = shared::input_file_as_lines(DAY_NUMBER);
+  let input = include_str!("../input1.txt");
+  let lines = shared::input_as_lines(input);
 
   let games: Vec<CubeGame> = 
     lines.iter().map(|x| parse_game(x)).collect();
@@ -104,6 +104,11 @@ pub fn part2() -> String {
     })
     .sum::<i32>()
     .to_string()
+}
+
+fn main() {
+  println!("{}", part1());
+  println!("{}", part2());
 }
 
 #[cfg(test)]

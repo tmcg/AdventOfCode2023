@@ -1,6 +1,3 @@
-use crate::shared;
-
-const DAY_NUMBER: i32 = 4;
 
 #[derive(Debug)]
 struct Card {
@@ -70,15 +67,17 @@ impl From<&str> for Card {
 }
 
 pub fn part1() -> String {
-    let lines = shared::input_file_as_lines(DAY_NUMBER);
+    let input = include_str!("../input1.txt");
+    let lines = shared::input_as_lines(input);
     let cards: Vec<Card> = lines.into_iter().map(|x| x.as_str().into()).collect();
 
     cards.into_iter().map(|x| x.points()).sum::<u64>().to_string()
 }
 
 pub fn part2() -> String {
-    let lines = shared::input_file_as_lines(DAY_NUMBER);
-    let cards: Vec<Card> = lines.into_iter().map(|x| x.as_str().into()).collect();
+    let input = include_str!("../input1.txt");
+    let lines = shared::input_as_lines(input);
+      let cards: Vec<Card> = lines.into_iter().map(|x| x.as_str().into()).collect();
     let mut memo = Card::create_memo(cards.len());
 
     let mut total: u32 = 0;
@@ -87,6 +86,11 @@ pub fn part2() -> String {
     }
 
     total.to_string()
+}
+
+fn main() {
+    println!("{}", part1());
+    println!("{}", part2());
 }
 
 #[cfg(test)]

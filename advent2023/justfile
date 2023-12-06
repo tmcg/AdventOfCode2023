@@ -1,0 +1,14 @@
+set shell := ["pwsh.exe", "-c"]
+
+work day:
+    cargo watch -w {{day}} -x "check -p {{day}}" -s "just test {{day}}" -s "just lint {{day}}"
+lint day:
+    cargo clippy -p {{day}}
+test day:
+    cargo nextest run -p {{day}}
+test-nc day:
+    cargo nextest run --no-capture -p {{day}}
+test-all:
+    cargo nextest run
+create day:
+    cargo generate --path ./template --name {{day}}

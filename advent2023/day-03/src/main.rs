@@ -1,6 +1,3 @@
-use crate::shared;
-
-const DAY_NUMBER: i32 = 3;
 
 #[derive(Debug)]
 struct EngineComponent {
@@ -186,7 +183,8 @@ impl From<Vec<String>> for Engine {
 }
 
 pub fn part1() -> String {
-  let lines = shared::input_file_as_lines(DAY_NUMBER);
+  let input = include_str!("../input1.txt");
+  let lines = shared::input_as_lines(input);
   let eng: Engine = lines.into();
   
   eng.schematic.iter()
@@ -197,7 +195,8 @@ pub fn part1() -> String {
 }
 
 pub fn part2() -> String {
-  let lines = shared::input_file_as_lines(DAY_NUMBER);
+  let input = include_str!("../input1.txt");
+  let lines = shared::input_as_lines(input);
   let eng: Engine = lines.into();
 
   eng.schematic.iter()
@@ -205,6 +204,11 @@ pub fn part2() -> String {
     .map(|x| x.ratio)
     .sum::<u32>()
     .to_string()
+}
+
+fn main() {
+  println!("{}", part1());
+  println!("{}", part2());
 }
 
 #[cfg(test)]

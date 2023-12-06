@@ -1,6 +1,3 @@
-use crate::shared;
-
-const DAY_NUMBER: i32 = 1;
 
 fn find_numbers(s: &String, use_words: bool) -> (u32, u32) {
   let mut first: Option<u32> = None; 
@@ -33,8 +30,9 @@ fn find_numbers(s: &String, use_words: bool) -> (u32, u32) {
 }
 
 pub fn part1() -> String {
-  let lines = shared::input_file_as_lines(DAY_NUMBER);
-
+  let input = include_str!("../input1.txt");
+  let lines = shared::input_as_lines(input);
+  
   lines.iter()
     .map(|s| find_numbers(s, false))
     .map(|t| (t.0 * 10) + t.1)
@@ -43,13 +41,19 @@ pub fn part1() -> String {
 }
 
 pub fn part2() -> String {
-  let lines = shared::input_file_as_lines(DAY_NUMBER);
+  let input = include_str!("../input1.txt");
+  let lines = shared::input_as_lines(input);
 
   lines.iter()
-    .map(|s| find_numbers(s, false))
+    .map(|s| find_numbers(s, true))
     .map(|t| (t.0 * 10) + t.1)
     .sum::<u32>()
     .to_string()
+}
+
+fn main() {
+    println!("{}", part1());
+    println!("{}", part2());
 }
 
 #[cfg(test)]
@@ -64,3 +68,4 @@ mod tests {
     assert_eq!(super::part2(), "54203");
   }
 }
+
