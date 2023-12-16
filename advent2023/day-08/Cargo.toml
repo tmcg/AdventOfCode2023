@@ -1,0 +1,9 @@
+[package]
+name = "day-08"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+shared = { path = "../shared" }
+nom = { workspace = true }
+regex = { workspace = true }
