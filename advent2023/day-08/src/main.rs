@@ -11,12 +11,10 @@ struct CamelNetwork {
 impl CamelNetwork {
 
     fn find_steps_pt1(&self) -> u32 {
-        let ch = self.inst.chars().collect::<Vec<_>>();
-
         let mut curr = "AAA";
         let mut count = 0;
 
-        for inst in ch.into_iter().cycle() {
+        for inst in self.inst.chars().cycle() {
             match inst {
                 'L' => curr = self.nodes[curr].0.as_str(),
                 'R' => curr = self.nodes[curr].1.as_str(),
@@ -29,13 +27,45 @@ impl CamelNetwork {
         }
         0
     }
+
+    fn find_steps_pt2(&self) -> u64 {
+        let mut counts: Vec<u64> = vec![];
+        let mut count = 0u64;
+
+        let mut ghosts =
+            self.nodes.keys()
+            .filter(|k| k.ends_with('A'))
+            .map(|x| x.as_str())
+            .collect::<Vec<_>>();
+
+        println!("{:?}", ghosts);
+
+        for inst in self.inst.chars().cycle() {
+            count += 1;
+
+            for g in ghosts.iter_mut() {
+                if inst == 'L' { *g = self.nodes[*g].0.as_str(); }
+                if inst == 'R' { *g = self.nodes[*g].1.as_str(); }
+
+                if (*g).ends_with('Z') {
+                    counts.push(count);
+                }
+            }
+
+            //println!("counts.len()={:?}, ghosts.len()={:?}", counts.len(), ghosts.len());
+            if counts.len() >= ghosts.len() {
+                return shared::lcm(&counts);
+            }
+        }
+        0
+    }
 }
 
 impl From<&str> for CamelNetwork {
     fn from(item: &str) -> Self {
         let inst = item.split("\r\n").take(1).map(|x| x.to_owned()).next().unwrap();
 
-        let re2 = Regex::new(r"([A-Z]+) = .([A-Z]+), ([A-Z]+).").unwrap();
+        let re2 = Regex::new(r"([0-9A-Z]+) = .([0-9A-Z]+), ([0-9A-Z]+).").unwrap();
         let mut nodes = HashMap::<String, (String, String)>::new();
 
         re2.captures_iter(item)
@@ -64,7 +94,8 @@ pub fn part1() -> String {
 pub fn part2() -> String {
     let input = include_str!("../input1.txt");
 
-    input.len().to_string()
+    let net = CamelNetwork::from(input);
+    net.find_steps_pt2().to_string()
 }
 
 fn main() {
@@ -103,12 +134,19 @@ mod tests {
     }
 
     #[test]
+    fn solve_steps_pt2() {
+        let input4 = include_str!("../input4.txt");
+        let net4 = CamelNetwork::from(input4);
+        assert_eq!(net4.find_steps_pt2(), 6);
+    }
+
+    #[test]
     fn solve_part1() {
         assert_eq!(part1(), "18827");
     }
 
     #[test]
     fn solve_part2() {
-        //assert_eq!(part2(), "zz");
+        assert_eq!(part2(), "20220305520997");
     }
 }
