@@ -15,20 +15,31 @@ impl History {
     fn next_seq(&self) -> i64 {
         let mut v: Vec<Vec<i64>> = vec![self.input.clone()];
 
-        let mut cont: bool = true;
-
-        while cont {
+        loop {
             let w = v.last().unwrap();
             let x = History::next_row(w);
-            cont = x.iter().any(|x| *x != 0);
+
+            if x.iter().all(|a| *a == 0) {
+                return v.iter()
+                    .map(|a| a.last().unwrap())
+                    .sum::<i64>();
+            }
+
             v.push(x);
         }
+    }
 
-        let vsum = v.iter()
-            .map(|a| a.last().unwrap())
-            .sum::<i64>();
+    fn reverse(&self) -> History {
+        let input =
+            self.input
+                .iter()
+                .rev()
+                .cloned()
+                .collect();
 
-        vsum
+        History {
+            input
+        }
     }
 }
 
@@ -62,8 +73,14 @@ pub fn part2() -> String {
     let input = include_str!("../input1.txt");
     let lines = shared::input_as_lines(input);
 
-    let line = lines.get(0).unwrap().as_str();
-    History::from(line).input.len().to_string()
+    let total =
+        lines.iter()
+        .map(|x| History::from(x.as_str()))
+        .map(|h| h.reverse())
+        .map(|h| h.next_seq())
+        .sum::<i64>();
+
+    total.to_string()
 }
 
 fn main() {
@@ -118,6 +135,15 @@ mod tests {
             .sum::<i64>();
     
         assert_eq!(total, 114);
+
+        let total =
+            lines.iter()
+            .map(|x| History::from(x.as_str()))
+            .map(|h| h.reverse())
+            .map(|h| h.next_seq())
+            .sum::<i64>();
+
+        assert_eq!(total, 2); 
     }
 
     #[test]
@@ -127,6 +153,6 @@ mod tests {
 
     #[test]
     fn solve_part2() {
-        //assert_eq!(part2(), "zz");
+        assert_eq!(part2(), "973");
     }
 }
